@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-thumb{background:#cabfa8;border-radius:10px;border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-track{background:transparent}
+@keyframes vfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes vpulse{0%,100%{opacity:1}50%{opacity:.45}}
+</style>
+</helmet>
+<div style="display:flex;height:100vh;width:100%;font-family:'Noto Sans TC',-apple-system,sans-serif;background:#F1ECE1;color:#211E18;overflow:hidden;font-size:15px;line-height:1.65">
+
+  <aside style="{{ asideStyle }}">
+    <div style="{{ brandRowStyle }}">
+      <div style="width:40px;height:40px;border-radius:9px;background:linear-gradient(150deg,#C8A24B,#9C7A2C);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif TC',serif;font-weight:900;font-size:21px;color:#26312A;flex:0 0 auto">設</div>
+      <sc-if value="{{ sideExpanded }}" hint-placeholder-val="{{ true }}">
+        <div style="line-height:1.25;flex:1;min-width:0;overflow:hidden">
+          <div style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:16px;color:#F3EEE3;letter-spacing:.5px;white-space:nowrap">{{ brandTitle }}</div>
+          <div style="font-size:11px;color:#8E9A8C;letter-spacing:1px;white-space:nowrap">{{ brandSub }}</div>
+        </div>
+      </sc-if>
+      <button onClick="{{ toggleSide }}" title="收合 / 展開" style="{{ toggleStyle }}" style-hover="background:rgba(255,255,255,.12)">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="{{ toggleIcon }}"></path></svg>
+      </button>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:3px;margin-top:4px">
+      <button onClick="{{ goHome }}" title="總覽" style="{{ nsHome }}">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.8 12 3l9 7.8M5 9.5V20h14V9.5"></path></svg>
+        <span style="{{ navLabelStyle }}">總覽</span>
+      </button>
+      <button onClick="{{ goYears }}" title="歷年試題" style="{{ nsYears }}">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2zM9 4v14"></path></svg>
+        <span style="{{ navLabelStyle }}">歷年試題</span>
+      </button>
+      <button onClick="{{ goMock }}" title="模擬測驗" style="{{ nsMock }}">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5l3 2M12 22a8 8 0 1 0 0-16 8 8 0 0 0 0 16M9 2h6"></path></svg>
+        <span style="{{ navLabelStyle }}">模擬測驗</span>
+      </button>
+      <button onClick="{{ goTopics }}" title="主題練習" style="{{ nsTopics }}">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"></path></svg>
+        <span style="{{ navLabelStyle }}">主題練習</span>
+      </button>
+      <button onClick="{{ goWrong }}" title="錯題本" style="{{ nsWrong }}">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18M6 4h11l-2 4 2 4H6"></path></svg>
+        <span style="{{ navLabelStyle }}">錯題本</span>
+        <span style="{{ wrongBadgeStyle }}">{{ wrongBadge }}</span>
+      </button>
+      <button onClick="{{ goBrowse }}" title="題庫詳解" style="{{ nsBrowse }}">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5c-2-1.4-5-1.4-7 0v13c2-1.4 5-1.4 7 0 2-1.4 5-1.4 7 0V5c-2-1.4-5-1.4-7 0zM12 5v13"></path></svg>
+        <span style="{{ navLabelStyle }}">題庫詳解</span>
+      </button>
+      <button onClick="{{ goStats }}" title="學習統計" style="{{ nsStats }}">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V11M12 21V4M19 21v-7"></path></svg>
+        <span style="{{ navLabelStyle }}">學習統計</span>
+      </button>
+    </nav>
+    <div style="{{ progressStyle }}">
+      <div style="font-size:11px;color:#869083;letter-spacing:1px;margin-bottom:8px">學習進度</div>
+      <div style="display:flex;align-items:baseline;gap:6px"><span style="font-family:'Noto Serif TC',serif;font-size:26px;font-weight:700;color:#E8C56A">{{ sideSeen }}</span><span style="font-size:12px;color:#9aa498">/ {{ sideTotal }} 題</span></div>
+      <div style="height:6px;border-radius:6px;background:rgba(255,255,255,.1);margin-top:8px;overflow:hidden"><div style="{{ sideBarStyle }}"></div></div>
+      <div style="font-size:11.5px;color:#9aa498;margin-top:7px">平均正確率 <b style="color:#CFC8BA">{{ sideAcc }}%</b></div>
+    </div>
+  </aside>
+
+  <main style="flex:1;min-width:0;overflow-y:auto;position:relative">
+
+    <sc-if value="{{ isLoading }}" hint-placeholder-val="{{ true }}">
+      <div style="height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;color:#8a8473">
+        <div style="font-family:'Noto Serif TC',serif;font-size:22px;animation:vpulse 1.2s infinite">載入題庫中…</div>
+        <div style="font-size:13px">98 – 115 學年度 · 設計群專業（一）</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isError }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:60px;color:#b04632"><h2>載入失敗</h2><p>{{ errorMsg }}</p></div>
+    </sc-if>
+
+    <!-- ============ HOME ============ -->
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1060px;margin:0 auto;padding:46px 48px 60px">
+        <div style="font-size:13px;letter-spacing:3px;color:#A07C2C;font-weight:700;margin-bottom:6px">DESIGN GROUP · PROFESSIONAL SUBJECT I</div>
+        <h1 style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:34px;margin:0 0 6px;letter-spacing:1px">{{ greeting }}</h1>
+        <p style="margin:0 0 30px;color:#6c6757;font-size:15px">整合 98–115 學年度共 18 份歷屆試題 · 色彩原理、造形原理、設計概論</p>
+
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:34px">
+          <sc-for list="{{ homeStats }}" as="s" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid #E6DFD0;border-radius:14px;padding:20px 20px 18px">
+              <div style="font-size:12.5px;color:#8a8473;letter-spacing:.5px;margin-bottom:10px">{{ s.label }}</div>
+              <div style="display:flex;align-items:baseline;gap:5px"><span style="font-family:'Noto Serif TC',serif;font-size:33px;font-weight:700;color:{{ s.color }}">{{ s.value }}</span><span style="font-size:13px;color:#9b9483">{{ s.unit }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:22px">
+          <div>
+            <h3 style="font-family:'Noto Serif TC',serif;font-size:18px;margin:0 0 14px;font-weight:600">開始練習</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <sc-for list="{{ quick }}" as="q" hint-placeholder-count="4">
+                <button onClick="{{ q.onClick }}" style="{{ q.style }}" style-hover="border-color:#26312A;transform:translateY(-2px)">
+                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px">
+                    <div style="{{ q.iconWrap }}"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="{{ q.icon }}"></path></svg></div>
+                    <span style="font-family:'Noto Serif TC',serif;font-weight:600;font-size:16.5px;color:#211E18">{{ q.title }}</span>
+                  </div>
+                  <div style="font-size:12.5px;color:#7a7565;line-height:1.55">{{ q.desc }}</div>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <h3 style="font-family:'Noto Serif TC',serif;font-size:18px;margin:0 0 14px;font-weight:600">最近測驗</h3>
+            <div style="background:#fff;border:1px solid #E6DFD0;border-radius:14px;padding:8px 4px">
+              <sc-if value="{{ hasRecent }}" hint-placeholder-val="{{ true }}">
+                <sc-for list="{{ recent }}" as="r" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid #F0EBDF">
+                    <div style="{{ r.ring }}">{{ r.score }}</div>
+                    <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.title }}</div><div style="font-size:11.5px;color:#9b9483">{{ r.meta }}</div></div>
+                  </div>
+                </sc-for>
+              </sc-if>
+              <sc-if value="{{ noRecent }}" hint-placeholder-val="{{ true }}">
+                <div style="padding:34px 16px;text-align:center;color:#a59f8e;font-size:13px">尚無測驗紀錄<br>從左側選擇模式開始吧</div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ YEARS ============ -->
+    <sc-if value="{{ isYears }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1060px;margin:0 auto;padding:42px 48px 60px">
+        <h1 style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:28px;margin:0 0 4px">歷年試題練習</h1>
+        <p style="margin:0 0 26px;color:#6c6757">依學年度作答，立即顯示對錯與詳解。共 {{ yearTotalPapers }} 份考卷。</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <sc-for list="{{ yearCards }}" as="y" hint-placeholder-count="9">
+            <button onClick="{{ y.onClick }}" style="text-align:left;background:#fff;border:1px solid #E6DFD0;border-radius:14px;padding:20px;cursor:pointer;transition:.16s" style-hover="border-color:#26312A;box-shadow:0 8px 22px rgba(38,49,42,.1);transform:translateY(-2px)">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+                <div><div style="font-family:'Noto Serif TC',serif;font-size:30px;font-weight:700;line-height:1">{{ y.year }}</div><div style="font-size:11.5px;color:#9b9483;letter-spacing:1px">學年度 · {{ y.count }}題</div></div>
+                <div style="{{ y.badgeStyle }}">{{ y.badge }}</div>
+              </div>
+              <div style="height:7px;border-radius:7px;background:#EFEADE;overflow:hidden;margin-bottom:8px"><div style="{{ y.barStyle }}"></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;color:#8a8473"><span>已作答 {{ y.done }}/{{ y.count }}</span><span>{{ y.accLabel }}</span></div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ MOCK INTRO ============ -->
+    <sc-if value="{{ isMock }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:760px;margin:0 auto;padding:54px 48px">
+        <div style="background:#26312A;border-radius:20px;padding:42px 44px;color:#E9E3D6;position:relative;overflow:hidden">
+          <div style="position:absolute;right:-30px;top:-30px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(200,162,75,.28),transparent 70%)"></div>
+          <div style="font-size:12px;letter-spacing:3px;color:#C8A24B;font-weight:700;margin-bottom:10px">MOCK EXAMINATION</div>
+          <h1 style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:30px;margin:0 0 14px;color:#fff">隨機模擬測驗</h1>
+          <p style="margin:0 0 26px;color:#aeb6a9;font-size:14.5px;max-width:480px">仿真統測情境，自 880 題題庫中隨機抽選 50 題、限時 100 分鐘。作答期間不顯示答案，交卷後一次評分並提供完整詳解。</p>
+          <div style="display:flex;gap:30px;margin-bottom:30px">
+            <div><div style="font-family:'Noto Serif TC',serif;font-size:28px;font-weight:700;color:#E8C56A">50</div><div style="font-size:12px;color:#9aa498">題數</div></div>
+            <div><div style="font-family:'Noto Serif TC',serif;font-size:28px;font-weight:700;color:#E8C56A">100</div><div style="font-size:12px;color:#9aa498">分鐘</div></div>
+            <div><div style="font-family:'Noto Serif TC',serif;font-size:28px;font-weight:700;color:#E8C56A">100</div><div style="font-size:12px;color:#9aa498">滿分</div></div>
+          </div>
+          <button onClick="{{ onStartMock }}" style="background:#C8A24B;color:#26312A;border:none;border-radius:11px;padding:14px 30px;font-size:16px;font-weight:700;font-family:'Noto Sans TC';cursor:pointer;display:inline-flex;align-items:center;gap:9px" style-hover="background:#d9b35c">開始測驗
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px">
+          <div style="background:#fff;border:1px solid #E6DFD0;border-radius:12px;padding:16px 18px;font-size:13px;color:#6c6757"><b style="color:#211E18">計時提醒</b><br>剩餘 10 分鐘時計時器轉為紅色，時間到自動交卷。</div>
+          <div style="background:#fff;border:1px solid #E6DFD0;border-radius:12px;padding:16px 18px;font-size:13px;color:#6c6757"><b style="color:#211E18">答錯自動收錄</b><br>所有答錯題目會進入「錯題本」供日後複習。</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ TOPICS ============ -->
+    <sc-if value="{{ isTopics }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1000px;margin:0 auto;padding:42px 48px 60px">
+        <h1 style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:28px;margin:0 0 4px">主題分類練習</h1>
+        <p style="margin:0 0 28px;color:#6c6757">跨年度抽題，針對單一科目集中練習（每回 40 題，立即詳解）。</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+          <sc-for list="{{ topicCards }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.onClick }}" style="{{ t.cardStyle }}" style-hover="transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.1)">
+              <div style="{{ t.iconWrap }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.icon }}"></path></svg></div>
+              <div style="font-family:'Noto Serif TC',serif;font-size:21px;font-weight:700;margin:14px 0 4px;color:#fff">{{ t.name }}</div>
+              <div style="font-size:12.5px;color:rgba(255,255,255,.78);margin-bottom:16px">{{ t.en }}</div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid rgba(255,255,255,.22);padding-top:12px">
+                <div><div style="font-size:11px;color:rgba(255,255,255,.7)">題庫</div><div style="font-family:'Noto Serif TC',serif;font-size:19px;font-weight:700;color:#fff">{{ t.count }}</div></div>
+                <div style="text-align:right"><div style="font-size:11px;color:rgba(255,255,255,.7)">正確率</div><div style="font-family:'Noto Serif TC',serif;font-size:19px;font-weight:700;color:#fff">{{ t.acc }}</div></div>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ RUNNER ============ -->
+    <sc-if value="{{ isRunner }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;height:100%">
+        <div style="flex:0 0 auto;background:#fff;border-bottom:1px solid #E6DFD0;padding:14px 28px;display:flex;align-items:center;gap:18px">
+          <button onClick="{{ onExit }}" style="background:none;border:1px solid #DDD5C4;border-radius:9px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6c6757;flex:0 0 auto" style-hover="background:#F1ECE1"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg></button>
+          <div style="flex:1;min-width:0">
+            <div style="font-family:'Noto Serif TC',serif;font-weight:600;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r_title }}</div>
+            <div style="height:5px;border-radius:5px;background:#EFEADE;overflow:hidden;margin-top:7px;max-width:520px"><div style="{{ r_progStyle }}"></div></div>
+          </div>
+          <div style="font-size:13px;color:#8a8473;white-space:nowrap">第 <b style="color:#211E18;font-size:15px">{{ r_index }}</b> / {{ r_total }} 題</div>
+          <sc-if value="{{ r_isMock }}" hint-placeholder-val="{{ true }}">
+            <div style="{{ r_timerStyle }}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path></svg><span style="font-variant-numeric:tabular-nums;font-weight:700">{{ r_timer }}</span></div>
+          </sc-if>
+        </div>
+
+        <div style="flex:1;overflow-y:auto;display:flex;justify-content:center">
+          <div style="width:100%;max-width:1140px;display:flex;gap:26px;padding:30px 30px 40px">
+            <div style="flex:1;min-width:0">
+              <div style="background:#fff;border:1px solid #E6DFD0;border-radius:16px;padding:30px 34px">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+                  <span style="{{ r_topicStyle }}">{{ r_topicName }}</span>
+                  <span style="font-size:12px;color:#9b9483">{{ r_year }}學年度 · 第 {{ r_qnum }} 題</span>
+                  <sc-if value="{{ r_hasFigure }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ r_openFig }}" style="margin-left:auto;background:#F4EEDF;color:#9A7A2C;border:1px solid #E6D7B0;border-radius:8px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px" style-hover="background:#efe6cf"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z M4 15l4-4 4 4 3-3 5 5"></path><circle cx="9" cy="9" r="1.4"></circle></svg>試題附圖</button>
+                  </sc-if>
+                </div>
+                <div style="font-family:'Noto Serif TC',serif;font-size:20px;line-height:1.75;color:#1c1a15;font-weight:500;margin-bottom:8px;text-wrap:pretty">{{ r_stem }}</div>
+                <sc-if value="{{ r_needsImage }}" hint-placeholder-val="{{ true }}">
+                  <div style="background:#FBF6E9;border:1px dashed #E0CF9E;border-radius:10px;padding:12px 14px;font-size:13px;color:#9A7A2C;margin:6px 0 4px">本題選項為圖形，請點上方「試題附圖」對照原始試題作答。</div>
+                </sc-if>
+                <div style="display:flex;flex-direction:column;gap:11px;margin-top:20px">
+                  <sc-for list="{{ r_options }}" as="opt" hint-placeholder-count="4">
+                    <button onClick="{{ opt.onClick }}" style="{{ opt.style }}">
+                      <span style="{{ opt.badgeStyle }}">{{ opt.letter }}</span>
+                      <span style="flex:1;text-align:left;line-height:1.6">{{ opt.text }}</span>
+                      <span style="{{ opt.markStyle }}">{{ opt.mark }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+
+                <sc-if value="{{ r_revealed }}" hint-placeholder-val="{{ true }}">
+                  <div style="margin-top:22px;border-top:1px solid #EEE8DA;padding-top:18px">
+                    <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+                      <span style="{{ r_verdictStyle }}">{{ r_verdict }}</span>
+                      <span style="font-size:13.5px;color:#6c6757">正確答案：<b style="color:#2E7D52;font-size:15px">{{ r_answerLabel }}</b></span>
+                    </div>
+                    <sc-if value="{{ r_hasExpl }}" hint-placeholder-val="{{ true }}">
+                      <div style="background:#F7F3E9;border-radius:11px;padding:15px 18px;font-size:14px;line-height:1.78;color:#473f2c"><b style="color:#9A7A2C;font-family:'Noto Serif TC',serif">詳解　</b>{{ r_explanation }}</div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:12px;margin-top:20px">
+                <button onClick="{{ onPrev }}" style="{{ prevStyle }}"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>上一題</button>
+                <button onClick="{{ onNext }}" style="{{ nextStyle }}">下一題<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></button>
+                <button onClick="{{ onSubmit }}" style="{{ submitStyle }}">{{ r_submitLabel }}</button>
+              </div>
+            </div>
+
+            <div style="flex:0 0 188px;align-self:flex-start;background:#fff;border:1px solid #E6DFD0;border-radius:14px;padding:16px">
+              <div style="font-size:12px;color:#8a8473;letter-spacing:.5px;margin-bottom:12px;font-weight:600">答題卡</div>
+              <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px">
+                <sc-for list="{{ r_palette }}" as="p" hint-placeholder-count="50">
+                  <button onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.n }}</button>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;margin-top:14px;font-size:11.5px;color:#8a8473">
+                <div style="display:flex;align-items:center;gap:7px"><span style="width:13px;height:13px;border-radius:4px;background:#26312A;display:inline-block"></span>{{ r_legendDone }}</div>
+                <div style="display:flex;align-items:center;gap:7px"><span style="width:13px;height:13px;border-radius:4px;background:#fff;border:1px solid #D8D0BF;display:inline-block"></span>未作答</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ RESULT ============ -->
+    <sc-if value="{{ isResult }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:780px;margin:0 auto;padding:48px 40px 60px">
+        <div style="background:#fff;border:1px solid #E6DFD0;border-radius:20px;padding:38px 44px;text-align:center">
+          <div style="font-size:12px;letter-spacing:3px;color:#A07C2C;font-weight:700;margin-bottom:6px">{{ res_title }}</div>
+          <div style="{{ res_ring }}"><div style="font-family:'Noto Serif TC',serif;font-size:46px;font-weight:700;line-height:1">{{ res_score }}</div><div style="font-size:12px;color:#9b9483;margin-top:2px">分</div></div>
+          <div style="{{ res_gradeStyle }}">{{ res_grade }}</div>
+          <div style="display:flex;justify-content:center;gap:42px;margin-top:24px">
+            <div><div style="font-family:'Noto Serif TC',serif;font-size:24px;font-weight:700;color:#2E7D52">{{ res_correct }}</div><div style="font-size:12px;color:#9b9483">答對</div></div>
+            <div><div style="font-family:'Noto Serif TC',serif;font-size:24px;font-weight:700;color:#C0392B">{{ res_wrong }}</div><div style="font-size:12px;color:#9b9483">答錯</div></div>
+            <div><div style="font-family:'Noto Serif TC',serif;font-size:24px;font-weight:700">{{ res_total }}</div><div style="font-size:12px;color:#9b9483">總題數</div></div>
+            <div><div style="font-family:'Noto Serif TC',serif;font-size:24px;font-weight:700">{{ res_dur }}</div><div style="font-size:12px;color:#9b9483">用時</div></div>
+          </div>
+          <div style="display:flex;gap:12px;justify-content:center;margin-top:30px">
+            <button onClick="{{ onReviewResult }}" style="background:#26312A;color:#fff;border:none;border-radius:11px;padding:13px 26px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC'" style-hover="background:#33433a">檢視詳解</button>
+            <sc-if value="{{ res_hasWrong }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ onRetryWrong }}" style="background:#fff;color:#C0392B;border:1px solid #E3B6AE;border-radius:11px;padding:13px 26px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC'" style-hover="background:#FBF1EF">重做錯題</button>
+            </sc-if>
+            <button onClick="{{ onResultHome }}" style="background:#fff;color:#6c6757;border:1px solid #DDD5C4;border-radius:11px;padding:13px 26px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans TC'" style-hover="background:#F1ECE1">回總覽</button>
+          </div>
+        </div>
+        <div style="margin-top:22px;background:#fff;border:1px solid #E6DFD0;border-radius:14px;padding:18px 22px">
+          <div style="font-size:13px;color:#8a8473;font-weight:600;margin-bottom:12px">作答一覽（點擊檢視）</div>
+          <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:7px">
+            <sc-for list="{{ res_items }}" as="it" hint-placeholder-count="50">
+              <button onClick="{{ it.onClick }}" style="{{ it.style }}">{{ it.n }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ WRONG ============ -->
+    <sc-if value="{{ isWrong }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:920px;margin:0 auto;padding:42px 48px 60px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px">
+          <div><h1 style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:28px;margin:0 0 4px">錯題本</h1><p style="margin:0;color:#6c6757">收錄所有答錯題目，共 <b style="color:#C0392B">{{ wrongCount }}</b> 題。</p></div>
+          <sc-if value="{{ hasWrong }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ onStartWrong }}" style="background:#26312A;color:#fff;border:none;border-radius:11px;padding:12px 22px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC'" style-hover="background:#33433a">開始複習錯題</button>
+          </sc-if>
+        </div>
+        <sc-if value="{{ wrongEmpty }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#fff;border:1px solid #E6DFD0;border-radius:16px;padding:60px;text-align:center;color:#a59f8e"><div style="font-family:'Noto Serif TC',serif;font-size:20px;color:#6c6757;margin-bottom:6px">目前沒有錯題</div><div style="font-size:13px">作答後答錯的題目會自動收錄於此</div></div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ wrongList }}" as="w" hint-placeholder-count="0">
+            <div style="background:#fff;border:1px solid #E6DFD0;border-radius:13px;padding:18px 22px">
+              <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+                <span style="{{ w.topicStyle }}">{{ w.topicName }}</span>
+                <span style="font-size:12px;color:#9b9483">{{ w.year }}學年度 · 第{{ w.n }}題</span>
+                <span style="margin-left:auto;font-size:12.5px;color:#C0392B">你選 {{ w.choice }}　正解 <b style="color:#2E7D52">{{ w.answer }}</b></span>
+              </div>
+              <div style="font-family:'Noto Serif TC',serif;font-size:15.5px;line-height:1.7;color:#2a271f">{{ w.stem }}</div>
+              <sc-if value="{{ w.hasExpl }}" hint-placeholder-val="{{ true }}">
+                <div style="background:#F7F3E9;border-radius:9px;padding:11px 14px;font-size:13px;line-height:1.7;color:#5a5340;margin-top:11px">{{ w.explanation }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ BROWSE / 詳解 ============ -->
+    <sc-if value="{{ isBrowse }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:960px;margin:0 auto;padding:42px 48px 60px">
+        <h1 style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:28px;margin:0 0 4px">題庫詳解</h1>
+        <p style="margin:0 0 20px;color:#6c6757">瀏覽全部 880 題，附正確答案與詳解。可依年度、科目與關鍵字篩選。</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px;position:sticky;top:0;background:#F1ECE1;padding:10px 0;z-index:2">
+          <select onChange="{{ setBrowseYear }}" style="{{ selStyle }}">
+            <sc-for list="{{ browseYearOpts }}" as="o" hint-placeholder-count="19"><option value="{{ o.value }}" selected="{{ o.sel }}">{{ o.label }}</option></sc-for>
+          </select>
+          <div style="display:flex;gap:6px">
+            <sc-for list="{{ browseTopicTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
+          </div>
+          <input placeholder="搜尋題目關鍵字…" value="{{ browseQuery }}" onInput="{{ setBrowseQuery }}" style="flex:1;min-width:160px;background:#fff;border:1px solid #DDD5C4;border-radius:10px;padding:9px 14px;font-size:14px;font-family:'Noto Sans TC';outline:none">
+          <span style="font-size:12.5px;color:#9b9483">{{ browseCount }} 題</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:13px">
+          <sc-for list="{{ browseList }}" as="b" hint-placeholder-count="10">
+            <div style="background:#fff;border:1px solid #E6DFD0;border-radius:13px;padding:20px 24px">
+              <div style="display:flex;align-items:center;gap:9px;margin-bottom:11px">
+                <span style="{{ b.numStyle }}">{{ b.n }}</span>
+                <span style="{{ b.topicStyle }}">{{ b.topicName }}</span>
+                <span style="font-size:12px;color:#9b9483">{{ b.year }}學年度</span>
+                <sc-if value="{{ b.hasFigure }}" hint-placeholder-val="{{ true }}"><button onClick="{{ b.openFig }}" style="font-size:11.5px;color:#9A7A2C;background:#F4EEDF;border:1px solid #E6D7B0;border-radius:6px;padding:3px 9px;cursor:pointer">附圖</button></sc-if>
+              </div>
+              <div style="font-family:'Noto Serif TC',serif;font-size:16px;line-height:1.7;color:#1c1a15;margin-bottom:13px">{{ b.stem }}</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px">
+                <sc-for list="{{ b.options }}" as="o" hint-placeholder-count="4"><div style="{{ o.style }}"><b style="margin-right:6px">{{ o.letter }}</b>{{ o.text }}</div></sc-for>
+              </div>
+              <sc-if value="{{ b.hasExpl }}" hint-placeholder-val="{{ true }}">
+                <div style="background:#F7F3E9;border-radius:9px;padding:11px 15px;font-size:13px;line-height:1.72;color:#5a5340;margin-top:8px"><b style="color:#9A7A2C">詳解　</b>{{ b.explanation }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ STATS ============ -->
+    <sc-if value="{{ isStats }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1000px;margin:0 auto;padding:42px 48px 60px">
+        <h1 style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:28px;margin:0 0 22px">學習統計</h1>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px">
+          <sc-for list="{{ statBig }}" as="s" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid #E6DFD0;border-radius:14px;padding:20px"><div style="font-size:12.5px;color:#8a8473;margin-bottom:9px">{{ s.label }}</div><div style="display:flex;align-items:baseline;gap:4px"><span style="font-family:'Noto Serif TC',serif;font-size:30px;font-weight:700;color:{{ s.color }}">{{ s.value }}</span><span style="font-size:12px;color:#9b9483">{{ s.unit }}</span></div></div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px">
+          <div style="background:#fff;border:1px solid #E6DFD0;border-radius:14px;padding:22px 24px">
+            <h3 style="font-family:'Noto Serif TC',serif;font-size:16px;margin:0 0 16px;font-weight:600">各科目掌握度</h3>
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <sc-for list="{{ statTopics }}" as="t" hint-placeholder-count="3">
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="font-weight:500">{{ t.name }}</span><span style="color:#8a8473">{{ t.label }}</span></div>
+                  <div style="height:9px;border-radius:9px;background:#EFEADE;overflow:hidden"><div style="{{ t.barStyle }}"></div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #E6DFD0;border-radius:14px;padding:22px 24px">
+            <h3 style="font-family:'Noto Serif TC',serif;font-size:16px;margin:0 0 16px;font-weight:600">測驗紀錄</h3>
+            <sc-if value="{{ statHasExams }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:3px;max-height:260px;overflow-y:auto">
+                <sc-for list="{{ statExams }}" as="e" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;gap:12px;padding:9px 4px;border-bottom:1px solid #F2EDE1">
+                    <div style="{{ e.ring }}">{{ e.score }}</div>
+                    <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ e.title }}</div><div style="font-size:11px;color:#9b9483">{{ e.meta }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ statNoExams }}" hint-placeholder-val="{{ true }}"><div style="padding:40px 10px;text-align:center;color:#a59f8e;font-size:13px">尚無測驗紀錄</div></sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </main>
+
+  <!-- ============ FIGURE MODAL ============ -->
+  <sc-if value="{{ figOpen }}" hint-placeholder-val="{{ true }}">
+    <div onClick="{{ closeFig }}" style="position:fixed;inset:0;background:rgba(28,24,18,.6);display:flex;align-items:center;justify-content:center;z-index:50;padding:30px">
+      <div style="background:#fff;border-radius:16px;width:min(900px,94vw);height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4)">
+        <div style="flex:0 0 auto;padding:14px 20px;border-bottom:1px solid #E6DFD0;display:flex;align-items:center;gap:12px">
+          <div style="font-family:'Noto Serif TC',serif;font-weight:600;font-size:15px">{{ figTitle }}</div>
+          <div style="font-size:12px;color:#9b9483">原始試題頁 · 可滾動 / 縮放</div>
+          <button onClick="{{ closeFig }}" style="margin-left:auto;background:#F1ECE1;border:none;border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:18px;color:#6c6757">✕</button>
+        </div>
+        <iframe src="{{ figSrc }}" style="flex:1;border:none;width:100%;background:#525659"></iframe>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1340,&quot;height&quot;:860}}">
+class Component extends DCLogic {
+  state = { loading:true, error:null, view:'home', activeNav:'home', session:null, tick:0, figOpen:false, figSrc:'', figTitle:'', browseYear:'all', browseTopic:'all', browseQuery:'' };
+
+  async componentDidMount(){
+    try{
+      const [qs, meta] = await Promise.all([
+        fetch('data/questions.json').then(r=>r.json()),
+        fetch('data/meta.json').then(r=>r.json())
+      ]);
+      this.meta = meta; this.questions = qs; this.byId = {};
+      qs.forEach(q=>this.byId[q.id]=q);
+      this.pdfOf = {}; meta.years.forEach(y=>this.pdfOf[y.year]=y.pdf);
+      this.loadProg();
+      this.setState({loading:false, browseYear:String(meta.years[meta.years.length-1].year)});
+    }catch(e){ this.setState({loading:false, error:String(e&&e.message||e)}); }
+  }
+  componentWillUnmount(){ this.stopTimer(); }
+
+  loadProg(){ try{ this.prog=JSON.parse(localStorage.getItem('sg1_v1'))||{}; }catch(e){ this.prog={}; }
+    if(!this.prog.seen)this.prog.seen={}; if(!this.prog.exams)this.prog.exams=[]; }
+  saveProg(){ try{ localStorage.setItem('sg1_v1', JSON.stringify(this.prog)); }catch(e){} }
+
+  TN(k){ return {color:'色彩原理',form:'造形原理',design:'設計概論'}[k]; }
+  TC(k){ return {color:'#BD5B3D',form:'#3F6A86',design:'#A77B2E'}[k]; }
+  TEN(k){ return {color:'Color Theory',form:'Form Principles',design:'Design Concepts'}[k]; }
+
+  go(view){ this.stopTimer(); this.setState({view, session:null, activeNav:view}); }
+  shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+  startYear(year){
+    const ids=this.questions.filter(q=>q.year===year).sort((a,b)=>a.n-b.n).map(q=>q.id);
+    this.begin(ids,{mode:'practice', navKey:'years', title:year+'學年度 歷年試題', immediate:true});
+  }
+  startTopic(topic){
+    const ids=this.shuffle(this.questions.filter(q=>q.topic===topic&&q.options).map(q=>q.id)).slice(0,40);
+    this.begin(ids,{mode:'topic', navKey:'topics', title:this.TN(topic)+' 主題練習', immediate:true});
+  }
+  startMock(){
+    const ids=this.shuffle(this.questions.filter(q=>q.options)).slice(0,50).map(q=>q.id);
+    this.begin(ids,{mode:'mock', navKey:'mock', title:'隨機模擬測驗', immediate:false, limitSec:100*60});
+  }
+  startWrong(){
+    const ids=this.wrongIds(); if(!ids.length){ this.go('wrong'); return; }
+    this.begin(this.shuffle(ids),{mode:'wrong', navKey:'wrong', title:'錯題複習', immediate:true});
+  }
+
+  begin(ids, opt){
+    this.stopTimer();
+    const session={ ids, idx:0, answers:{}, revealed:{}, review:false,
+      mode:opt.mode, navKey:opt.navKey, title:opt.title, immediate:opt.immediate,
+      limitSec:opt.limitSec||null, startedAt:Date.now(), finished:false, result:null };
+    this.setState({view:'runner', session, activeNav:opt.navKey});
+    if(opt.limitSec) this.startTimer();
+  }
+
+  startTimer(){ this.stopTimer(); this._t=setInterval(()=>{
+    const s=this.state.session; if(!s||s.finished){this.stopTimer();return;}
+    const left=s.limitSec-Math.floor((Date.now()-s.startedAt)/1000);
+    if(left<=0){ this.submit(); } else { this.setState(st=>({tick:st.tick+1})); }
+  },1000); }
+  stopTimer(){ if(this._t){clearInterval(this._t);this._t=null;} }
+
+  curQ(){ const s=this.state.session; return this.byId[s.ids[s.idx]]; }
+
+  choose(letter){
+    const s=this.state.session; if(s.finished||s.review) return;
+    const q=this.curQ();
+    const answers={...s.answers,[q.id]:letter};
+    const revealed={...s.revealed};
+    if(s.immediate){ revealed[q.id]=true; this.recordSeen(q,letter); this.saveProg(); }
+    this.setState({session:{...s,answers,revealed}});
+  }
+  recordSeen(q,letter){ this.prog.seen[q.id]={choice:letter, correct:q.answer.includes(letter), ts:Date.now(), year:q.year, topic:q.topic}; }
+
+  navStep(d){ const s=this.state.session; const idx=Math.min(s.ids.length-1,Math.max(0,s.idx+d)); this.setState({session:{...s,idx}}); }
+  goTo(i){ const s=this.state.session; this.setState({session:{...s,idx:i}}); }
+
+  submit(){
+    this.stopTimer();
+    const s=this.state.session;
+    let correct=0;
+    s.ids.forEach(id=>{ const q=this.byId[id]; const c=s.answers[id]; if(c&&q.answer.includes(c))correct++; });
+    if(s.mode==='mock'){ s.ids.forEach(id=>{ const c=s.answers[id]; if(c) this.recordSeen(this.byId[id],c); }); }
+    const durationSec=Math.floor((Date.now()-s.startedAt)/1000);
+    this.prog.exams.unshift({ts:Date.now(),mode:s.mode,title:s.title,total:s.ids.length,correct,durationSec});
+    this.prog.exams=this.prog.exams.slice(0,60); this.saveProg();
+    this.setState({view:'result', session:{...s,finished:true,result:{correct,durationSec}}});
+  }
+
+  reviewResult(){ const s=this.state.session; const rev={}; s.ids.forEach(id=>rev[id]=true);
+    this.setState({view:'runner', session:{...s, review:true, revealed:rev, idx:0}}); }
+  reviewAt(i){ const s=this.state.session; const rev={}; s.ids.forEach(id=>rev[id]=true);
+    this.setState({view:'runner', session:{...s, review:true, revealed:rev, idx:i}}); }
+
+  wrongIds(){ return Object.keys(this.prog.seen).filter(id=>this.prog.seen[id]&&!this.prog.seen[id].correct&&this.byId[id]); }
+
+  openFig(q){ const src=this.pdfOf[q.year]+'#page='+(q.figurePage||1)+'&view=FitH'; this.setState({figOpen:true, figSrc:src, figTitle:q.year+'學年度 第'+q.n+'題'}); }
+
+  fmtClock(sec){ sec=Math.max(0,sec); const m=Math.floor(sec/60),s=sec%60; return (m<10?'0':'')+m+':'+(s<10?'0':'')+s; }
+  fmtDur(sec){ const m=Math.floor(sec/60),s=sec%60; return m>0?(m+'分'+(s<10?'0':'')+s+'秒'):(s+'秒'); }
+  pctOf(c,t){ return t>0?Math.round(c/t*100):0; }
+
+  navBtnStyle(active,collapsed){ return { display:'flex',alignItems:'center',gap:collapsed?0:11,width:'100%',padding:collapsed?'12px 0':'11px 13px',justifyContent:collapsed?'center':'flex-start',borderRadius:10,border:'none',cursor:'pointer',
+    fontFamily:"'Noto Sans TC'",fontSize:14.5,fontWeight:active?700:500,
+    background:active?'rgba(200,162,75,.16)':'transparent', color:active?'#E8C56A':'#BDB6A6',
+    borderLeft:active?'3px solid #C8A24B':'3px solid transparent', transition:'.15s' }; }
+
+  renderVals(){
+    const S=this.state;
+    const col=!!S.sideCollapsed;
+    const _ak=S.activeNav||'home';
+    const _nl=col?{display:'none'}:{flex:1,textAlign:'left'};
+    let _wn=0; try{ if(this.prog&&this.prog.seen&&this.byId){ _wn=Object.keys(this.prog.seen).filter(id=>this.byId[id]&&!this.prog.seen[id].correct).length; } }catch(e){}
+    const D={
+      goHome:()=>this.go('home'), goYears:()=>this.go('years'), goMock:()=>this.go('mock'), goTopics:()=>this.go('topics'), goWrong:()=>this.go('wrong'), goBrowse:()=>this.go('browse'), goStats:()=>this.go('stats'),
+      nsHome:this.navBtnStyle(_ak==='home',col), nsYears:this.navBtnStyle(_ak==='years',col), nsMock:this.navBtnStyle(_ak==='mock',col), nsTopics:this.navBtnStyle(_ak==='topics',col), nsWrong:this.navBtnStyle(_ak==='wrong',col), nsBrowse:this.navBtnStyle(_ak==='browse',col), nsStats:this.navBtnStyle(_ak==='stats',col),
+      navLabelStyle:_nl,
+      wrongBadge:(!col&&_wn)?String(_wn):'',
+      wrongBadgeStyle:(!col&&_wn)?{background:'#C0392B',color:'#fff',fontSize:11,fontWeight:700,borderRadius:20,padding:'1px 7px',minWidth:18,textAlign:'center'}:{display:'none'},
+      sideCollapsed:col, sideExpanded:!col, toggleSide:()=>this.setState(st=>({sideCollapsed:!st.sideCollapsed})),
+      toggleIcon: col?'M9 6l6 6-6 6':'M15 6l-6 6 6 6',
+      asideStyle:{width:col?74:250,flex:'0 0 '+(col?74:250)+'px',background:'#26312A',color:'#CFC8BA',display:'flex',flexDirection:'column',padding:col?'24px 12px 18px':'26px 16px 18px',transition:'width .22s ease',overflow:'hidden'},
+      brandRowStyle:{display:'flex',alignItems:'center',gap:col?0:11,flexDirection:col?'column':'row',padding:col?'0 0 18px':'0 4px 22px'},
+      toggleStyle:{flex:'0 0 auto',marginTop:col?14:0,background:'rgba(255,255,255,.06)',border:'none',borderRadius:8,width:32,height:32,display:'flex',alignItems:'center',justifyContent:'center',color:'#BDB6A6',cursor:'pointer',transition:'.15s'},
+      progressStyle:{marginTop:'auto',padding:'14px 12px 4px',borderTop:'1px solid rgba(255,255,255,.08)',display:col?'none':'block'},
+      isLoading:S.loading, isError:!!S.error, errorMsg:S.error||'',
+      isHome:false,isYears:false,isMock:false,isTopics:false,isRunner:false,isResult:false,isWrong:false,isBrowse:false,isStats:false,
+      brandTitle:'設計群 專一', brandSub:'COLOR · FORM · DESIGN',
+      nav:[], sideSeen:0, sideTotal:880, sideAcc:0, sideBarStyle:{width:'0%',height:'100%',background:'#C8A24B'},
+      figOpen:S.figOpen, figSrc:S.figSrc, figTitle:S.figTitle, closeFig:()=>this.setState({figOpen:false}),
+      greeting:'歡迎回來', homeStats:[], quick:[], recent:[], hasRecent:false, noRecent:true,
+      yearCards:[], yearTotalPapers:18, topicCards:[],
+      onStartMock:()=>this.startMock(),
+      r_title:'',r_index:0,r_total:0,r_progStyle:{},r_isMock:false,r_timer:'',r_timerStyle:{},
+      r_topicName:'',r_topicStyle:{},r_year:'',r_qnum:0,r_stem:'',r_hasFigure:false,r_needsImage:false,r_openFig:()=>{},
+      r_options:[],r_revealed:false,r_verdict:'',r_verdictStyle:{},r_answerLabel:'',r_hasExpl:false,r_explanation:'',
+      r_palette:[],onPrev:()=>{},onNext:()=>{},onSubmit:()=>{},onExit:()=>this.go('home'),
+      prevStyle:{},nextStyle:{},submitStyle:{},r_submitLabel:'交卷',r_legendDone:'已作答',
+      res_title:'',res_score:0,res_ring:{},res_grade:'',res_gradeStyle:{},res_correct:0,res_wrong:0,res_total:0,res_dur:'',
+      res_items:[],onReviewResult:()=>{},onRetryWrong:()=>{},onResultHome:()=>this.go('home'),res_hasWrong:false,
+      wrongList:[],wrongEmpty:true,hasWrong:false,wrongCount:0,onStartWrong:()=>this.startWrong(),
+      browseYearOpts:[],browseTopicTabs:[],browseList:[],browseCount:0,browseQuery:S.browseQuery,
+      setBrowseYear:e=>this.setState({browseYear:e.target.value}), setBrowseQuery:e=>this.setState({browseQuery:e.target.value}),
+      selStyle:{background:'#fff',border:'1px solid #DDD5C4',borderRadius:10,padding:'9px 12px',fontSize:14,fontFamily:"'Noto Sans TC'",cursor:'pointer',color:'#211E18'},
+      statBig:[],statTopics:[],statExams:[],statHasExams:false,statNoExams:true
+    };
+    if(S.loading||S.error) return D;
+
+    const seenIds=Object.keys(this.prog.seen);
+    const seenArr=seenIds.map(id=>this.prog.seen[id]);
+    const totalSeen=seenIds.length;
+    const totalCorrect=seenArr.filter(x=>x.correct).length;
+    const acc=this.pctOf(totalCorrect,totalSeen);
+    D.sideSeen=totalSeen; D.sideTotal=this.questions.length; D.sideAcc=acc;
+    D.sideBarStyle={width:this.pctOf(totalSeen,this.questions.length)+'%',height:'100%',background:'#C8A24B',transition:'.4s'};
+
+    const wrong=this.wrongIds();
+    const ICON={home:'M3 10.8 12 3l9 7.8M5 9.5V20h14V9.5',book:'M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2zM9 4v14',timer:'M12 8v5l3 2M12 22a8 8 0 1 0 0-16 8 8 0 0 0 0 16M9 2h6',grid:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',flag:'M6 3v18M6 4h11l-2 4 2 4H6',search:'M12 5c-2-1.4-5-1.4-7 0v13c2-1.4 5-1.4 7 0 2-1.4 5-1.4 7 0V5c-2-1.4-5-1.4-7 0zM12 5v13',chart:'M5 21V11M12 21V4M19 21v-7'};
+
+    // ---------- HOME ----------
+    if(S.view==='home'){ D.isHome=true;
+      const hr=new Date().getHours();
+      D.greeting = hr<11?'早安，準備好今天的練習了嗎？':hr<18?'午安，繼續精進設計學科':'晚安，今晚也要加油';
+      D.homeStats=[
+        {label:'題庫總題數',value:this.questions.length,unit:'題',color:'#26312A'},
+        {label:'已練習',value:totalSeen,unit:'題',color:'#A07C2C'},
+        {label:'平均正確率',value:acc,unit:'%',color:'#2E7D52'},
+        {label:'模擬測驗',value:this.prog.exams.filter(e=>e.mode==='mock').length,unit:'次',color:'#3F6A86'}
+      ];
+      const qd=[
+        {key:'years',title:'歷年試題',desc:'98–115 共 18 份考卷，依年度完整演練',icon:ICON.book,c:'#26312A',onClick:()=>this.go('years')},
+        {key:'mock',title:'隨機模擬考',desc:'抽 50 題、限時 100 分鐘的仿真測驗',icon:ICON.timer,c:'#BD5B3D',onClick:()=>this.go('mock')},
+        {key:'topics',title:'主題練習',desc:'色彩 / 造形 / 設計概論 分科集中練習',icon:ICON.grid,c:'#3F6A86',onClick:()=>this.go('topics')},
+        {key:'wrong',title:'錯題複習',desc:wrong.length?('目前有 '+wrong.length+' 題待加強'):'答錯題目自動收錄複習',icon:ICON.flag,c:'#A07C2C',onClick:()=>this.go('wrong')}
+      ];
+      D.quick=qd.map(q=>({title:q.title,desc:q.desc,icon:q.icon,onClick:q.onClick,
+        style:{textAlign:'left',background:'#fff',border:'1px solid #E6DFD0',borderRadius:14,padding:'18px 20px',cursor:'pointer',transition:'.16s'},
+        iconWrap:{width:34,height:34,borderRadius:9,background:q.c,color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',flex:'0 0 auto'}}));
+      const ex=this.prog.exams.slice(0,5);
+      D.hasRecent=ex.length>0; D.noRecent=ex.length===0;
+      D.recent=ex.map(e=>this.examRow(e));
+    }
+
+    // ---------- YEARS ----------
+    if(S.view==='years'){ D.isYears=true;
+      D.yearTotalPapers=this.meta.years.length;
+      D.yearCards=this.meta.years.slice().reverse().map(y=>{
+        const qs=this.questions.filter(q=>q.year===y.year);
+        const done=qs.filter(q=>this.prog.seen[q.id]).length;
+        const cor=qs.filter(q=>this.prog.seen[q.id]&&this.prog.seen[q.id].correct).length;
+        const pct=this.pctOf(done,y.count);
+        const complete=done>=y.count;
+        return { year:y.year, count:y.count, done, onClick:()=>this.startYear(y.year),
+          accLabel: done? ('正確率 '+this.pctOf(cor,done)+'%') : '尚未作答',
+          badge: complete?'已完成':(done>0?'進行中':'未開始'),
+          badgeStyle:{fontSize:11,fontWeight:600,borderRadius:20,padding:'3px 10px',
+            background:complete?'#E4F0E8':(done>0?'#F4EEDF':'#F0EBDF'),
+            color:complete?'#2E7D52':(done>0?'#A07C2C':'#9b9483')},
+          barStyle:{width:pct+'%',height:'100%',background:complete?'#2E7D52':'#C8A24B',transition:'.3s'} };
+      });
+    }
+
+    if(S.view==='mock'){ D.isMock=true; }
+
+    // ---------- TOPICS ----------
+    if(S.view==='topics'){ D.isTopics=true;
+      D.topicCards=['color','form','design'].map(k=>{
+        const qs=this.questions.filter(q=>q.topic===k);
+        const done=qs.filter(q=>this.prog.seen[q.id]).length;
+        const cor=qs.filter(q=>this.prog.seen[q.id]&&this.prog.seen[q.id].correct).length;
+        const col=this.TC(k);
+        return { name:this.TN(k), en:this.TEN(k), count:qs.length, acc: done?(this.pctOf(cor,done)+'%'):'—', onClick:()=>this.startTopic(k),
+          cardStyle:{textAlign:'left',background:'linear-gradient(155deg,'+col+','+this.shade(col)+')',border:'none',borderRadius:16,padding:'24px',cursor:'pointer',transition:'.18s',boxShadow:'0 6px 16px '+col+'33'},
+          iconWrap:{width:46,height:46,borderRadius:12,background:'rgba(255,255,255,.2)',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center'},
+          icon: k==='color'?'M12 3a9 9 0 1 0 0 18c1.5 0 2-1 2-2 0-1.5 1-2 2-2h1a3 3 0 0 0 3-3 8 8 0 0 0-8-9zM7.5 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM10 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM15 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2z' : k==='form'?'M12 2 2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5':'M9.5 3h5l1 4 3.5 1.5-1 4 1 4L15 21l-1.5 3h-3L9 21l-3.5-1.5 1-4-1-4L8 7z' };
+      });
+    }
+
+    // ---------- RUNNER ----------
+    if(S.view==='runner' && S.session){ D.isRunner=true;
+      const s=S.session, q=this.curQ();
+      D.r_title=s.title+(s.review?'　·　詳解檢視':'');
+      D.r_index=s.idx+1; D.r_total=s.ids.length;
+      D.r_progStyle={width:this.pctOf(s.idx+1,s.ids.length)+'%',height:'100%',background:'#26312A',transition:'.25s'};
+      D.r_isMock=s.mode==='mock'&&!s.review;
+      if(D.r_isMock){ const left=s.limitSec-Math.floor((Date.now()-s.startedAt)/1000); const warn=left<=600;
+        D.r_timer=this.fmtClock(left);
+        D.r_timerStyle={display:'flex',alignItems:'center',gap:7,padding:'7px 13px',borderRadius:9,fontSize:15,
+          background:warn?'#FBEDEA':'#F1ECE1', color:warn?'#C0392B':'#3a362c', animation:warn?'vpulse 1.4s infinite':'none'};
+      }
+      D.r_topicName=this.TN(q.topic);
+      D.r_topicStyle={fontSize:12,fontWeight:600,color:'#fff',background:this.TC(q.topic),borderRadius:6,padding:'3px 10px'};
+      D.r_year=q.year; D.r_qnum=q.n; D.r_stem=q.stem;
+      D.r_hasFigure=q.hasFigure; D.r_needsImage=q.needsImage; D.r_openFig=()=>this.openFig(q);
+      const revealed=!!s.revealed[q.id];
+      const chosen=s.answers[q.id]||null;
+      const opts=q.options||{};
+      D.r_options=['A','B','C','D'].map(L=>{
+        if(!opts[L]) return null;
+        const isCor=q.answer.includes(L), isChosen=chosen===L;
+        let bg='#fff',bd='#E2DACA',fg='#2a271f',badgeBg='#F1ECE1',badgeFg='#6c6757',mark='',markColor='';
+        if(revealed){
+          if(isCor){ bg='#EDF6F0';bd='#9FD3B2';badgeBg='#2E7D52';badgeFg='#fff';mark='✓';markColor='#2E7D52'; }
+          else if(isChosen){ bg='#FBEFEC';bd='#E3B0A6';badgeBg='#C0392B';badgeFg='#fff';mark='✗';markColor='#C0392B'; }
+          else { fg='#8a8473'; }
+        } else if(isChosen){ bg='#FBF4E4';bd='#C8A24B';badgeBg='#C8A24B';badgeFg='#26312A'; }
+        return { letter:L, text:opts[L], mark, onClick:()=>this.choose(L),
+          style:{display:'flex',alignItems:'center',gap:13,width:'100%',textAlign:'left',background:bg,border:'1.5px solid '+bd,borderRadius:12,padding:'14px 16px',cursor:(revealed||s.review)?'default':'pointer',fontFamily:"'Noto Sans TC'",fontSize:15,color:fg,transition:'.13s'},
+          badgeStyle:{flex:'0 0 auto',width:27,height:27,borderRadius:7,background:badgeBg,color:badgeFg,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:14},
+          markStyle:{color:markColor,fontWeight:800,fontSize:18,width:18,textAlign:'center'} };
+      }).filter(Boolean);
+      D.r_revealed=revealed;
+      if(revealed){
+        const ok=chosen&&q.answer.includes(chosen);
+        D.r_verdict = chosen?(ok?'答對了':'答錯了'):'未作答';
+        D.r_verdictStyle={fontSize:13,fontWeight:700,color:'#fff',borderRadius:7,padding:'4px 12px',background:chosen?(ok?'#2E7D52':'#C0392B'):'#9b9483'};
+        D.r_answerLabel=q.answer.join('、');
+        D.r_hasExpl=!!q.explanation; D.r_explanation=q.explanation||'';
+      }
+      D.r_palette=s.ids.map((id,i)=>{
+        const ans=!!s.answers[id]; const cur=i===s.idx;
+        let bg='#fff',col='#6c6757',bd='#D8D0BF';
+        if(s.review){ const qq=this.byId[id]; const ok=s.answers[id]&&qq.answer.includes(s.answers[id]); bg=s.answers[id]?(ok?'#2E7D52':'#C0392B'):'#C7C0AF'; col='#fff'; bd='transparent'; }
+        else if(ans){ bg='#26312A';col='#fff';bd='transparent'; }
+        return { n:i+1, onClick:()=> s.review?this.reviewAt(i):this.goTo(i),
+          style:{aspectRatio:'1',border:'1px solid '+(cur?'#C8A24B':bd),borderRadius:7,background:bg,color:col,fontSize:12.5,fontWeight:600,cursor:'pointer',fontFamily:"'Noto Sans TC'",outline:cur?'2px solid #C8A24B':'none'} };
+      });
+      D.r_legendDone = s.review?'已作答':'已作答';
+      const firstQ=s.idx===0, lastQ=s.idx===s.ids.length-1;
+      const navBase={display:'inline-flex',alignItems:'center',gap:6,border:'1px solid #DDD5C4',background:'#fff',borderRadius:11,padding:'12px 20px',fontSize:14.5,fontWeight:600,fontFamily:"'Noto Sans TC'",cursor:'pointer',color:'#3a362c'};
+      D.onPrev=()=>this.navStep(-1); D.onNext=()=>this.navStep(1);
+      D.prevStyle={...navBase, opacity:firstQ?.4:1, pointerEvents:firstQ?'none':'auto'};
+      D.nextStyle={...navBase, opacity:lastQ?.4:1, pointerEvents:lastQ?'none':'auto'};
+      if(s.review){
+        D.onSubmit=()=>this.go(s.navKey); D.r_submitLabel='結束檢視';
+        D.submitStyle={marginLeft:'auto',background:'#26312A',color:'#fff',border:'none',borderRadius:11,padding:'12px 26px',fontSize:14.5,fontWeight:700,fontFamily:"'Noto Sans TC'",cursor:'pointer'};
+      } else {
+        D.onSubmit=()=>this.submit();
+        D.r_submitLabel = s.mode==='mock'?'交卷評分':'完成作答';
+        D.submitStyle={marginLeft:'auto',background:'#C8A24B',color:'#26312A',border:'none',borderRadius:11,padding:'12px 26px',fontSize:14.5,fontWeight:700,fontFamily:"'Noto Sans TC'",cursor:'pointer'};
+      }
+    }
+
+    // ---------- RESULT ----------
+    if(S.view==='result' && S.session && S.session.result){ D.isResult=true;
+      const s=S.session, r=s.result;
+      const total=s.ids.length, correct=r.correct, wrongN=total-correct;
+      const score=this.pctOf(correct,total);
+      D.res_title = s.mode==='mock'?'MOCK EXAM RESULT':'PRACTICE RESULT';
+      D.res_score=score; D.res_correct=correct; D.res_wrong=wrongN; D.res_total=total; D.res_dur=this.fmtDur(r.durationSec);
+      const gc = score>=80?'#2E7D52':score>=60?'#A07C2C':'#C0392B';
+      D.res_ring={width:148,height:148,borderRadius:'50%',margin:'14px auto 0',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:gc,
+        background:'conic-gradient('+gc+' '+(score*3.6)+'deg,#EFEADE 0)'};
+      D.res_grade = score>=80?'表現優異':score>=60?'及格通過':'仍需加強';
+      D.res_gradeStyle={display:'inline-block',marginTop:16,fontSize:15,fontWeight:700,color:gc,fontFamily:"'Noto Serif TC'"};
+      D.res_items=s.ids.map((id,i)=>{ const qq=this.byId[id]; const c=s.answers[id]; const ok=c&&qq.answer.includes(c);
+        return { n:i+1, onClick:()=>this.reviewAt(i),
+          style:{aspectRatio:'1',border:'none',borderRadius:7,cursor:'pointer',fontSize:13,fontWeight:600,fontFamily:"'Noto Sans TC'",
+            background: c?(ok?'#2E7D52':'#C0392B'):'#C7C0AF', color:'#fff'} };
+      });
+      D.onReviewResult=()=>this.reviewResult();
+      D.res_hasWrong=wrongN>0;
+      D.onRetryWrong=()=>{ const ids=s.ids.filter(id=>{const c=s.answers[id];return !(c&&this.byId[id].answer.includes(c));}); if(ids.length) this.begin(this.shuffle(ids),{mode:'wrong',navKey:s.navKey,title:'錯題重做',immediate:true}); };
+    }
+
+    // ---------- WRONG ----------
+    if(S.view==='wrong'){ D.isWrong=true;
+      D.wrongCount=wrong.length; D.hasWrong=wrong.length>0; D.wrongEmpty=wrong.length===0;
+      D.wrongList=wrong.map(id=>this.byId[id]).sort((a,b)=>this.prog.seen[b.id].ts-this.prog.seen[a.id].ts).map(q=>{
+        const rec=this.prog.seen[q.id];
+        return { topicName:this.TN(q.topic), topicStyle:{fontSize:11.5,fontWeight:600,color:'#fff',background:this.TC(q.topic),borderRadius:6,padding:'2px 9px'},
+          year:q.year, n:q.n, choice:rec.choice, answer:q.answer.join('、'), stem:q.stem, hasExpl:!!q.explanation, explanation:q.explanation||'' };
+      });
+    }
+
+    // ---------- BROWSE ----------
+    if(S.view==='browse'){ D.isBrowse=true;
+      D.browseYearOpts=[{value:'all',label:'全部年度',sel:S.browseYear==='all'}].concat(
+        this.meta.years.slice().reverse().map(y=>({value:String(y.year),label:y.year+'學年度',sel:S.browseYear===String(y.year)})));
+      const tabs=[['all','全部'],['color','色彩'],['form','造形'],['design','設計概論']];
+      D.browseTopicTabs=tabs.map(([k,l])=>({label:l,onClick:()=>this.setState({browseTopic:k}),
+        style:{border:'1px solid '+(S.browseTopic===k?'#26312A':'#DDD5C4'),background:S.browseTopic===k?'#26312A':'#fff',color:S.browseTopic===k?'#fff':'#6c6757',borderRadius:9,padding:'8px 14px',fontSize:13,fontWeight:600,cursor:'pointer',fontFamily:"'Noto Sans TC'"}}));
+      const qy=S.browseYear, qt=S.browseTopic, qq=(S.browseQuery||'').trim();
+      let list=this.questions.filter(q=>(qy==='all'||q.year===+qy)&&(qt==='all'||q.topic===qt));
+      if(qq) list=list.filter(q=>q.stem.includes(qq)||(q.options&&Object.values(q.options).some(o=>o.includes(qq))));
+      D.browseCount=list.length;
+      D.browseList=list.slice(0,80).map(q=>({
+        n:q.n, numStyle:{fontFamily:"'Noto Serif TC'",fontSize:13,fontWeight:700,color:'#fff',background:'#26312A',borderRadius:6,padding:'2px 9px'},
+        topicName:this.TN(q.topic), topicStyle:{fontSize:11.5,fontWeight:600,color:'#fff',background:this.TC(q.topic),borderRadius:6,padding:'2px 9px'},
+        year:q.year, stem:q.stem, hasFigure:q.hasFigure, openFig:()=>this.openFig(q),
+        hasExpl:!!q.explanation, explanation:q.explanation||'',
+        options:['A','B','C','D'].filter(L=>q.options&&q.options[L]).map(L=>{ const isCor=q.answer.includes(L);
+          return { letter:L, text:q.options[L], style:{fontSize:13,padding:'7px 11px',borderRadius:8,background:isCor?'#EDF6F0':'#F7F4ED',color:isCor?'#236B43':'#5a5546',border:'1px solid '+(isCor?'#B6DCC4':'#EAE3D3'),fontWeight:isCor?600:400} };
+        })
+      }));
+    }
+
+    // ---------- STATS ----------
+    if(S.view==='stats'){ D.isStats=true;
+      D.statBig=[
+        {label:'累計練習',value:totalSeen,unit:'題',color:'#26312A'},
+        {label:'答對題數',value:totalCorrect,unit:'題',color:'#2E7D52'},
+        {label:'平均正確率',value:acc,unit:'%',color:'#A07C2C'},
+        {label:'測驗次數',value:this.prog.exams.length,unit:'次',color:'#3F6A86'}
+      ];
+      D.statTopics=['color','form','design'].map(k=>{
+        const qs=this.questions.filter(q=>q.topic===k);
+        const done=qs.filter(q=>this.prog.seen[q.id]).length;
+        const cor=qs.filter(q=>this.prog.seen[q.id]&&this.prog.seen[q.id].correct).length;
+        const pct=this.pctOf(cor,done);
+        return { name:this.TN(k), label: done?(cor+'/'+done+'　'+pct+'%'):'尚未練習',
+          barStyle:{width:(done?pct:0)+'%',height:'100%',background:this.TC(k),transition:'.4s'} };
+      });
+      const ex=this.prog.exams.slice(0,12);
+      D.statHasExams=ex.length>0; D.statNoExams=ex.length===0;
+      D.statExams=ex.map(e=>this.examRow(e));
+    }
+
+    return D;
+  }
+
+  shade(hex){ const n=parseInt(hex.slice(1),16); let r=(n>>16)&255,g=(n>>8)&255,b=n&255; r=Math.round(r*.78);g=Math.round(g*.78);b=Math.round(b*.78); return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1); }
+
+  examRow(e){
+    const score=this.pctOf(e.correct,e.total);
+    const gc=score>=80?'#2E7D52':score>=60?'#A07C2C':'#C0392B';
+    const modeLabel={mock:'模擬測驗',practice:'歷年試題',topic:'主題練習',wrong:'錯題複習'}[e.mode]||'練習';
+    const d=new Date(e.ts); const dm=(d.getMonth()+1)+'/'+d.getDate()+' '+(d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes();
+    return { score, title:e.title||modeLabel, meta:dm+' · '+e.correct+'/'+e.total+' · '+this.fmtDur(e.durationSec),
+      ring:{flex:'0 0 auto',width:42,height:42,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:"'Noto Serif TC'",fontWeight:700,fontSize:15,color:gc,border:'2.5px solid '+gc} };
+  }
+}
+</script>
+</body>
+</html>

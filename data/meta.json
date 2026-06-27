@@ -1,0 +1,121 @@
+{
+ "generated": "2026-06-26T23:33:11.616Z",
+ "total": 880,
+ "years": [
+  {
+   "year": 98,
+   "count": 40,
+   "pdf": "source/98_07_1.pdf",
+   "label": "民國98年"
+  },
+  {
+   "year": 99,
+   "count": 40,
+   "pdf": "source/99_07_1.pdf",
+   "label": "民國99年"
+  },
+  {
+   "year": 100,
+   "count": 50,
+   "pdf": "source/100_07_1.pdf",
+   "label": "100年"
+  },
+  {
+   "year": 101,
+   "count": 50,
+   "pdf": "source/101_07_1.pdf",
+   "label": "101年"
+  },
+  {
+   "year": 102,
+   "count": 50,
+   "pdf": "source/102_07_1.pdf",
+   "label": "102年"
+  },
+  {
+   "year": 103,
+   "count": 50,
+   "pdf": "source/103_07_1.pdf",
+   "label": "103年"
+  },
+  {
+   "year": 104,
+   "count": 50,
+   "pdf": "source/104_07_1.pdf",
+   "label": "104年"
+  },
+  {
+   "year": 105,
+   "count": 50,
+   "pdf": "source/105_07_1.pdf",
+   "label": "105年"
+  },
+  {
+   "year": 106,
+   "count": 50,
+   "pdf": "source/106_07_1.pdf",
+   "label": "106年"
+  },
+  {
+   "year": 107,
+   "count": 50,
+   "pdf": "source/107_07_1.pdf",
+   "label": "107年"
+  },
+  {
+   "year": 108,
+   "count": 50,
+   "pdf": "source/108_07_1.pdf",
+   "label": "108年"
+  },
+  {
+   "year": 109,
+   "count": 50,
+   "pdf": "source/109_07_1.pdf",
+   "label": "109年"
+  },
+  {
+   "year": 110,
+   "count": 50,
+   "pdf": "source/110_07_1.pdf",
+   "label": "110年"
+  },
+  {
+   "year": 111,
+   "count": 50,
+   "pdf": "source/111_07_1.pdf",
+   "label": "111年"
+  },
+  {
+   "year": 112,
+   "count": 50,
+   "pdf": "source/112_07_1.pdf",
+   "label": "112年"
+  },
+  {
+   "year": 113,
+   "count": 50,
+   "pdf": "source/113_07_1.pdf",
+   "label": "113年"
+  },
+  {
+   "year": 114,
+   "count": 50,
+   "pdf": "source/114_07_1.pdf",
+   "label": "114年"
+  },
+  {
+   "year": 115,
+   "count": 50,
+   "pdf": "source/115-4y-07-1.pdf",
+   "label": "115年"
+  }
+ ],
+ "topicCounts": {
+  "color": 295,
+  "form": 277,
+  "design": 308
+ },
+ "withFigure": 136,
+ "noOptions": 2
+}
