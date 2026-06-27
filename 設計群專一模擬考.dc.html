@@ -19,6 +19,33 @@ html,body{margin:0;padding:0}
 ::-webkit-scrollbar-track{background:transparent}
 @keyframes vfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes vpulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+/* ===== 響應式：平板 / 手機（覆寫內聯版型，不動程式邏輯） ===== */
+@media (max-width:920px){
+  /* 4 欄、3 欄卡片 → 2 欄 */
+  [style*="repeat(4, 1fr)"],[style*="repeat(4,1fr)"],
+  [style*="repeat(3, 1fr)"],[style*="repeat(3,1fr)"]{grid-template-columns:repeat(2,1fr)!important}
+  /* 左右分欄（總覽）→ 上下堆疊 */
+  [style*="1.5fr 1fr"]{grid-template-columns:1fr!important}
+  /* 答題頁：右側答題卡改到題目下方、撐滿寬度 */
+  [style*="1140px"]{flex-direction:column!important}
+  [style*="188px"]{flex:1 1 auto!important;width:100%!important}
+}
+@media (max-width:600px){
+  /* 再窄 → 全部單欄 */
+  [style*="repeat(3, 1fr)"],[style*="repeat(3,1fr)"],
+  [style*="1fr 1fr"]{grid-template-columns:1fr!important}
+  /* 縮小桌面版的大留白 */
+  [style*="46px 48px 60px"]{padding:26px 16px 48px!important}
+  [style*="42px 48px 60px"]{padding:24px 16px 48px!important}
+  [style*="54px 48px"]{padding:32px 16px!important}
+  [style*="48px 40px 60px"]{padding:28px 14px 48px!important}
+  [style*="30px 30px 40px"]{padding:16px 12px 30px!important}
+  [style*="30px 34px"]{padding:20px 18px!important}
+  [style*="14px 28px"]{padding:12px 14px!important;flex-wrap:wrap!important}
+  /* 手機瀏覽器網址列高度修正 */
+  [style*="height: 100vh"],[style*="height:100vh"]{height:100dvh!important}
+}
 </style>
 </helmet>
 <div style="display:flex;height:100vh;width:100%;font-family:'Noto Sans TC',-apple-system,sans-serif;background:#F1ECE1;color:#211E18;overflow:hidden;font-size:15px;line-height:1.65">
@@ -442,6 +469,10 @@ class Component extends DCLogic {
   state = { loading:true, error:null, view:'home', activeNav:'home', session:null, tick:0, figOpen:false, figSrc:'', figTitle:'', browseYear:'all', browseTopic:'all', browseQuery:'' };
 
   async componentDidMount(){
+    // 窄螢幕自動收合側邊欄為圖示列；隨視窗寬度變化同步
+    this._syncSide=()=>{ const n=window.innerWidth<900; if(!!this.state.sideCollapsed!==n) this.setState({sideCollapsed:n}); };
+    this._syncSide();
+    window.addEventListener('resize',this._syncSide);
     try{
       const [qs, meta] = await Promise.all([
         fetch('data/questions.json').then(r=>r.json()),
@@ -454,7 +485,7 @@ class Component extends DCLogic {
       this.setState({loading:false, browseYear:String(meta.years[meta.years.length-1].year)});
     }catch(e){ this.setState({loading:false, error:String(e&&e.message||e)}); }
   }
-  componentWillUnmount(){ this.stopTimer(); }
+  componentWillUnmount(){ this.stopTimer(); if(this._syncSide) window.removeEventListener('resize',this._syncSide); }
 
   loadProg(){ try{ this.prog=JSON.parse(localStorage.getItem('sg1_v1'))||{}; }catch(e){ this.prog={}; }
     if(!this.prog.seen)this.prog.seen={}; if(!this.prog.exams)this.prog.exams=[]; }
